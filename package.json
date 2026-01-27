@@ -10,10 +10,15 @@
 		"deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
 		"upload": "opennextjs-cloudflare build && opennextjs-cloudflare upload",
 		"preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
-		"cf-typegen": "wrangler types --env-interface CloudflareEnv ./cloudflare-env.d.ts"
+		"cf-typegen": "wrangler types --env-interface CloudflareEnv ./cloudflare-env.d.ts",
+		"db:generate": "drizzle-kit generate",
+		"db:migrate:local": "wrangler d1 migrations apply shlink-db --local",
+		"db:migrate:remote": "wrangler d1 migrations apply shlink-db --remote",
+		"db:studio": "drizzle-kit studio"
 	},
 	"dependencies": {
 		"@opennextjs/cloudflare": "^1.15.1",
+		"drizzle-orm": "^0.45.1",
 		"next": "16.1.5",
 		"react": "19.1.5",
 		"react-dom": "19.1.5"
@@ -24,6 +29,7 @@
 		"@types/node": "^20",
 		"@types/react": "^19.1.5",
 		"@types/react-dom": "^19.1.5",
+		"drizzle-kit": "^0.31.8",
 		"eslint": "^9",
 		"eslint-config-next": "15.4.6",
 		"tailwindcss": "^4",
