@@ -125,23 +125,27 @@ As a developer, I want to programmatically shorten links or process large lists 
 - **FR-003**: System MUST create a new unique short link for every shortening request, even if the target URL already exists in the database.
 - **FR-004**: System MUST support permanent (301) and temporary (302) HTTP redirects.
 - **FR-005**: System MUST track click events using Cloudflare-native country detection (`cf` object), Referer header, and server-side User-Agent parsing (e.g., using `ua-parser-js`) for device type categorization.
-- **FR-006**: System MUST implement full user account management (Sign Up, Log In) using Email and Password for internal users to manage their links and access dashboards. System MUST additionally support API Key authentication for programmatic access.
+- **FR-006**: System MUST implement full user account management (Sign Up, Log In) using Email and Password. To secure internal access, Sign Up MUST be restricted to a specific allowed email domain whitelist (configurable via env var).
 - **FR-007**: System MUST generate a unique QR code for every shortened link, supporting high-restoration error correction and permitting a logo overlay in the center.
 - **FR-008**: System MUST provide a REST API with Bearer token authentication.
-- **FR-009**: System MUST persist all link and click data in a Cloudflare D1 database with a 1-year retention policy for click history. Old data MUST be archived automatically.
+- **FR-009**: System MUST persist link and click data in Cloudflare D1. To optimize storage, Raw Click Logs MUST be retained for 30 days, then aggregated into daily summaries for 1-year history. Old raw logs MUST be pruned automatically.
 - **FR-017**: System database operations MUST be managed using DrizzleORM for type-safe schema and query handling.
 - **FR-010**: System MUST support CSV file uploads for bulk URL shortening. In case of invalid URLs, the system MUST process valid ones and return a report detailing failures.
 - **FR-011**: System MUST allow setting an optional expiration date/time for any link. Expired links MUST show an error page but remain visible and restorable in the user dashboard.
 - **FR-012**: System MUST allow setting an optional password for any link. The landing page MUST display the target URL's metadata (title/favicon) to build trust.
 - **FR-013**: System MUST provide a minimalist, premium-styled landing page for password entry and displaying error states (e.g., link expired).
 - **FR-014**: System MUST provide a Global Settings interface allowing administrators to upload a default logo for QR code center overlays.
-- **FR-015**: System MUST support bulk shortening via API using an asynchronous batch job (POST /api/bulk) that returns a job_id for polling status and results.
-- **FR-016**: System MUST enforce tiered rate limiting: 10req/s for public redirection and 100req/s for internal API users.
-- **FR-018**: System MUST implement a "Dynamic Metadata Proxy" for social media previews. When accessed by a bot (detected via User-Agent), the system MUST fetch the target URL's metadata in real-time and serve an HTML page with appropriate OpenGraph/Twitter cards instead of immediately redirecting.
+- **FR-015**: System MUST support bulk shortening via API. For payloads under 1,000 URLs, processing MUST be synchronous for immediate feedback. Larger batches MUST use an asynchronous job queue.
+- **FR-016**: System MUST enforce tiered rate limiting: write operations (API/Dashboard) limited to 10 req/s per IP. Public redirection MUST be optimized for high throughput (standard DDoS protection only) to meet the 5,000 req/s target.
+- **FR-018**: System MUST implement a "Dynamic Metadata Proxy" for social media previews. Metadata fetched MUST be cached (e.g., in D1 or KV) to prevent redundant external requests on subsequent shares.
+- **FR-019**: System MUST allow users to assign multiple "Tags" to links for organization and filtering in the dashboard.
+- **FR-020**: The "Slug" (short path) of a link MUST be immutable (cannot be changed) after creation to prevent dead links. Users CAN update the Target URL, Tags, or Settings of an existing link.
+- **FR-021**: System MUST provide an "Export to CSV" function in the analytics dashboard, allowing users to download click data reports for specific links or date ranges.
+- **FR-022**: System MUST provide a built-in UTM Builder interface in the link creation/edit form to help users correctly append standard UTM parameters (source, medium, campaign) to their target URLs.
 
 ### Key Entities _(include if feature involves data)_
 
-- **Link**: Represents the mapping between slug and original URL. Attributes: slug, original_url, user_id, created_at, expires_at, password_hash, is_active.
+- **Link**: Represents the mapping between slug and original URL. Attributes: slug, original_url, user_id, created_at, expires_at, password_hash, is_active, tags (array/json).
 - **Click**: Represents a single visitor event. Attributes: link_id, timestamp, country, referrer, device_type, ip_address (anonymized).
 - **User**: Represents a registered account for link management/API access. Attributes: email, password_hash, api_key.
 
@@ -158,7 +162,7 @@ As a developer, I want to programmatically shorten links or process large lists 
 - **TC-002**: Data persistence MUST use Cloudflare D1 for relational data and Cloudflare R2 for binary/image storage (e.g., logos).
 - **TC-003**: Database interactions MUST use DrizzleORM.
 - **TC-004**: Authentication sessions MUST be managed using stateless JWTs stored in Secure, HttpOnly, and SameSite=Lax/Strict cookies.
-- **TC-005**: The application MUST be built using Next.js and deployed to Cloudflare Pages (utilizing Workers/D1/R2).
+- **TC-005**: The application MUST be built using Next.js on Cloudflare Pages. Critical Redirection Logic MUST be implemented in lightweight Middleware or a separate Worker to guarantee <100ms latency, decoupled from heavier Next.js rendering.
 
 ## Success Criteria _(mandatory)_
 
