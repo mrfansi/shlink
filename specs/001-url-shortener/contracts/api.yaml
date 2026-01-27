@@ -1,0 +1,145 @@
+openapi: 3.0.0
+info:
+  title: Shlink URL Shortener API
+  version: 1.0.0
+paths:
+  /api/links:
+    post:
+      summary: Create a short link
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - url
+              properties:
+                url:
+                  type: string
+                  format: uri
+                slug:
+                  type: string
+                expires_at:
+                  type: string
+                  format: date-time
+                password:
+                  type: string
+                tags:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        "201":
+          description: Link created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Link"
+    get:
+      summary: List user links
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          schema:
+            type: integer
+        - name: tag
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of links
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Link"
+
+  /api/links/{slug}:
+    get:
+      summary: Get link details
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Link details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Link"
+    delete:
+      summary: Delete a link
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Deleted
+
+  /api/links/{slug}/stats:
+    get:
+      summary: Get link statistics
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Stats
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total_clicks:
+                    type: integer
+                  countries:
+                    type: object
+                  devices:
+                    type: object
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+  schemas:
+    Link:
+      type: object
+      properties:
+        id:
+          type: string
+        slug:
+          type: string
+        original_url:
+          type: string
+        short_url:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        is_active:
+          type: boolean

@@ -1,0 +1,23 @@
+openapi: 3.0.0
+info:
+  title: Internal Proxy API
+  version: 1.0.0
+paths:
+  /api/internal/metadata:
+    get:
+      summary: Fetch URL Metadata
+      description: Internal endpoint for bot crawlers. Fetches OG tags from target URL.
+      parameters:
+        - name: url
+          in: query
+          required: true
+          schema:
+            type: string
+            format: uri
+      responses:
+        "200":
+          description: HTML snippet with meta tags
+          content:
+            text/html:
+              schema:
+                type: string
