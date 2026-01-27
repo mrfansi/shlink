@@ -54,8 +54,15 @@ export const verification = sqliteTable("verification", {
 	updatedAt: integer("updated_at", { mode: "timestamp" }),
 });
 
+export const globalConfig = sqliteTable("global_config", {
+	key: text("key").primaryKey(),
+	value: text("value").notNull(),
+	updatedAt: integer("updated_at", { mode: "timestamp" }).notNull(),
+});
+
 export type User = typeof user.$inferSelect;
 export type NewUser = typeof user.$inferInsert;
 export type Session = typeof session.$inferSelect;
 export type Account = typeof account.$inferSelect;
 export type Verification = typeof verification.$inferSelect;
+export type GlobalConfig = typeof globalConfig.$inferSelect;

@@ -8,11 +8,11 @@
 
 **Purpose**: Project initialization and basic structure
 
-- [ ] T001 Create Next.js project structure with `npx create-next-app`
-- [ ] T002 [P] Configure Tailwind CSS v4 in `src/app/globals.css`
-- [ ] T003 [P] Configure Shadcn UI components in `components.json` and install core components
-- [ ] T004 [P] Initialize Cloudflare Wrangler configuration in `wrangler.jsonc` (D1, R2, KV, **Queues**, **Cron Triggers**) - _See research.md #1 & #9_
-- [ ] T005 install core dependencies (drizzle-orm, better-auth, lucide-react)
+- [x] T001 Create Next.js project structure with `npx create-next-app`
+- [x] T002 [P] Configure Tailwind CSS v4 in `src/app/globals.css`
+- [x] T003 [P] Configure Shadcn UI components in `components.json` and install core components
+- [x] T004 [P] Initialize Cloudflare Wrangler configuration in `wrangler.jsonc` (D1, R2, KV, **Queues**, **Cron Triggers**) - _See research.md #1 & #9_
+- [x] T005 install core dependencies (drizzle-orm, better-auth, lucide-react)
 
 ## Phase 2: Foundational (Blocking Prerequisites)
 
@@ -20,13 +20,13 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T006 Setup Drizzle configuration and client in `src/db/client.ts`
-- [ ] T007 Define database schema for Users, Accounts, Sessions, Verification, and **GlobalConfig** in `src/db/schema.ts` - _See data-model.md_
-- [ ] T008 Implement Better Auth configuration with Drizzle adapter in `src/lib/auth.ts` - _See research.md #Authorization_
-- [ ] T009 [P] Create Auth API route handler in `src/app/api/auth/[...all]/route.ts`
-- [ ] T010 [P] Create basic public layout in `src/app/layout.tsx`
-- [ ] T011 [P] Create dashboard layout shell in `src/app/(dashboard)/layout.tsx`
-- [ ] T012 Implement Middleware for Host based routing in `src/middleware.ts` - _See research.md #11 (Domain & Host Routing)_
+- [x] T006 Setup Drizzle configuration and client in `src/db/client.ts`
+- [x] T007 Define database schema for Users, Accounts, Sessions, Verification, and **GlobalConfig** in `src/db/schema.ts` - _See data-model.md_
+- [x] T008 Implement Better Auth configuration with Drizzle adapter in `src/lib/auth.ts` - _See research.md #Authorization_
+- [x] T009 [P] Create Auth API route handler in `src/app/api/auth/[...all]/route.ts`
+- [x] T010 [P] Create basic public layout in `src/app/layout.tsx`
+- [x] T011 [P] Create dashboard layout shell in `src/app/(dashboard)/layout.tsx`
+- [x] T012 Implement Middleware for Host based routing in `src/middleware.ts` - _See research.md #11 (Domain & Host Routing)_
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 
