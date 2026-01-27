@@ -8,7 +8,7 @@ import { cookies } from "next/headers";
 
 // Create auth instance with D1 binding from Cloudflare context
 export async function getAuth() {
-  const { env } = await getCloudflareContext<Env>();
+  const { env } = await getCloudflareContext<Env>({ async: true });
   
   return betterAuth({
     database: drizzleAdapter(

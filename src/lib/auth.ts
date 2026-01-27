@@ -6,7 +6,7 @@ import * as schema from "@/db/schema";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 
 export const getAuth = async () => {
-  const context = await getCloudflareContext();
+  const context = await getCloudflareContext({ async: true });
   const env = context.env as unknown as Env;
 
   if (!env.shlink_db) {
