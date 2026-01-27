@@ -34,7 +34,20 @@
 	],
 	"observability": {
 		"enabled": true
-	}
+	},
+	"d1_databases": [
+		{
+			"binding": "shlink_db",
+			"database_name": "shlink-db",
+			"database_id": "20ecaa53-5986-482b-9221-b27a504d7123"
+		}
+	],
+	"r2_buckets": [
+		{
+			"bucket_name": "shlink-assets",
+			"binding": "shlink_assets"
+		}
+	]
 	/**
 	 * Smart Placement
 	 * https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement
