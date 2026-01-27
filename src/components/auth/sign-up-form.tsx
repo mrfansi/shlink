@@ -102,9 +102,6 @@ export function SignUpForm({
               <Button type="submit" className="w-full" disabled={loading}>
                 {loading ? <Loader2 className="animate-spin" /> : "Sign Up"}
               </Button>
-              <Button variant="outline" className="w-full">
-                Sign up with Google
-              </Button>
             </div>
             <div className="mt-4 text-center text-sm">
               Already have an account?{" "}
