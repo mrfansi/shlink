@@ -147,7 +147,8 @@ As a developer, I want to programmatically shorten links or process large lists 
 
 - **Link**: Represents the mapping between slug and original URL. Attributes: slug, original_url, user_id, created_at, expires_at, password_hash, is_active, tags (array/json).
 - **Click**: Represents a single visitor event. Attributes: link_id, timestamp, country, referrer, device_type, ip_address (anonymized).
-- **User**: Represents a registered account for link management/API access. Attributes: email, password_hash, api_key.
+- **User**: Represents a registered account for link management/API access. Attributes: email, password_hash, api_key, role ('user', 'admin').
+- **GlobalConfig**: Stores system-wide settings. Attributes: key (pk), value (json).
 
 ## Assumptions & Risks
 

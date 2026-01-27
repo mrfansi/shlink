@@ -1,50 +1,75 @@
-# [PROJECT_NAME] Constitution
+<!--
+Sync Impact Report:
+- Version change: Initial Template -> 1.0.0
+- List of modified principles: Established Edge-First, Type Safety, Visual Excellence, Schema-First, and Simplicity principles.
+- Added sections: Technical Constraints, Quality Gates.
+- Templates requiring updates: ✅ None (Defaults align).
+- Follow-up: None.
+-->
+
+# Shlink Constitution
+
 <!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
+### I. Edge-First Architecture
+
 <!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
 
-### [PRINCIPLE_2_NAME]
+The application is designed for the Cloudflare Workers runtime (OpenNext). All architectural decisions must prioritize edge compatibility, low cold-start times, and distributed consistency. Node.js-specific APIs should be avoided unless strictly necessary and polyfilled. State should be managed via Cloudflare D1 (SQL) and KV/R2 where appropriate.
+
+### II. End-to-End Type Safety
+
 <!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
 
-### [PRINCIPLE_3_NAME]
+TypeScript is non-negotiable. We enforce strict typing across the entire stack: from the database schema (Drizzle ORM) to the API layer (Zod validation) and the frontend components. `any` types are prohibited. API contracts must be defined and typed before implementation.
+
+### III. Visual Excellence
+
 <!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
 
-### [PRINCIPLE_4_NAME]
+The user interface must be polished, responsive, and accessible. We use Tailwind CSS (v4) for styling and Radix UI for accessible primitives. "Good enough" UI is not acceptable; we aim for a premium, fluid user experience with proper loading states and error feedback.
+
+### IV. Schema-First Design
+
 <!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
 
-### [PRINCIPLE_5_NAME]
+Data models and API contracts are defined first. We use Zod for runtime validation of all inputs (environment variables, API requests, form data). Database changes are managed via Drizzle Kit migrations, ensuring the schema in code always matches the database state.
+
+### V. Simplicity Over Complexity
+
 <!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
 
-## [SECTION_2_NAME]
+We prefer simple, standard web platform solutions over complex abstractions. Dependencies should be kept to a minimum to maintain generic bundle sizes small for the edge. If a standard web API exists (e.g., `fetch`, `Request`, `Response`), use it over a library wrapper.
+
+## Technical Constraints
+
 <!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+- **Runtime**: Cloudflare Workers (via OpenNext)
+- **Framework**: Next.js 15+ (App Router)
+- **Database**: Cloudflare D1 + Drizzle ORM
+- **Styling**: Tailwind CSS v4 + Radix UI
+- **Authentication**: Better-Auth
+- **Language**: TypeScript (Strict Mode)
 
-## [SECTION_3_NAME]
+## Quality Gates
+
 <!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+- **Linting**: All code must pass ESLint and Prettier checks.
+- **Type Check**: `tsc --noEmit` must pass before any commit.
+- **Build**: The project must successfully build (`npm run build`) before deployment.
+- **Migrations**: Any database schema change must be accompanied by a generated SQL migration file.
 
 ## Governance
+
 <!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+This Constitution defines the non-negotiable architectural and quality standards for the Shlink project.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+- **Amendments**: Changes to this document require a Pull Request with a clear rationale and must trigger a version bump.
+- **Compliance**: All code reviews must reference these principles when requesting changes. Use the `/speckit.constitution` workflow to update this file.
+
+**Version**: 1.0.0 | **Ratified**: 2026-01-27 | **Last Amended**: 2026-01-27

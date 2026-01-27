@@ -1,83 +1,104 @@
-# Implementation Plan: URL Shortener
+# Implementation Plan: [FEATURE]
 
-**Branch**: `001-url-shortener` | **Date**: 2026-01-27 | **Spec**: [spec.md](./spec.md)
-**Input**: Feature specification from `specs/001-url-shortener/spec.md`
+**Branch**: `[###-feature-name]` | **Date**: [DATE] | **Spec**: [link]
+**Input**: Feature specification from `/specs/[###-feature-name]/spec.md`
 
 **Note**: This template is filled in by the `/speckit.plan` command. See `.specify/templates/commands/plan.md` for the execution workflow.
 
 ## Summary
 
-The URL Shortener feature allows internal users to shorten long URLs into memorable, trackable short links. Key capabilities include custom slugs, detailed analytics (geolocation, device), QR code generation, and bulk processing. The system handles high-throughput redirection (<100ms) using Cloudflare Edge, with data persistence in D1 and R2.
+[Extract from feature spec: primary requirement + technical approach from research]
 
 ## Technical Context
 
-**Language/Version**: TypeScript 5.7+ (Strict Mode)
-**Primary Dependencies**: Next.js 16 (App Router), React 19, Better Auth 1.4+, Shadcn UI, Tailwind CSS v4, Lucide React
-**Storage**: Cloudflare D1 (SQLite) via Drizzle ORM, Cloudflare R2 (Assets)
-**Testing**: Vitest (Unit/Integration), Playwright (E2E) - *pending configuration*
-**Target Platform**: Cloudflare Workers/Pages (via OpenNext)
-**Project Type**: Web Application (Next.js)
-**Performance Goals**: <100ms redirection latency (p99), 5000 req/s throughput
-**Constraints**: 
-- No emoji icons (Lucide only)
-- Cursor pointer on all interactive elements
-- Light/Dark mode support
-- Responsive design (mobile to desktop)
+<!--
+  ACTION REQUIRED: Replace the content in this section with the technical details
+  for the project. The structure here is presented in advisory capacity to guide
+  the iteration process.
+-->
+
+**Language/Version**: [e.g., Python 3.11, Swift 5.9, Rust 1.75 or NEEDS CLARIFICATION]  
+**Primary Dependencies**: [e.g., FastAPI, UIKit, LLVM or NEEDS CLARIFICATION]  
+**Storage**: [if applicable, e.g., PostgreSQL, CoreData, files or N/A]  
+**Testing**: [e.g., pytest, XCTest, cargo test or NEEDS CLARIFICATION]  
+**Target Platform**: [e.g., Linux server, iOS 15+, WASM or NEEDS CLARIFICATION]
+**Project Type**: [single/web/mobile - determines source structure]  
+**Performance Goals**: [domain-specific, e.g., 1000 req/s, 10k lines/sec, 60 fps or NEEDS CLARIFICATION]  
+**Constraints**: [domain-specific, e.g., <200ms p95, <100MB memory, offline-capable or NEEDS CLARIFICATION]  
+**Scale/Scope**: [domain-specific, e.g., 10k users, 1M LOC, 50 screens or NEEDS CLARIFICATION]
 
 ## Constitution Check
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-### Core Principles (from AGENTS.md)
-1.  **Tech Stack Adherence**: Must use Next.js 16, Drizzle, Better Auth, Cloudflare. -> **COMPLIANT**
-2.  **UI/UX Standards**: No emojis, specific hover states, contrast requirements. -> **COMPLIANT**
-3.  **Code Style**: Strict TypeScript, explicit return types, named exports. -> **COMPLIANT**
-4.  **Database Patterns**: Drizzle `sqliteTable`, specific timestamp handling. -> **COMPLIANT**
-5.  **Performance**: <100ms latency requirement. -> **COMPLIANT**
+[Gates determined based on constitution file]
 
 ## Project Structure
 
 ### Documentation (this feature)
 
 ```text
-specs/001-url-shortener/
-├── plan.md              # This file
-├── research.md          # Phase 0 output
-├── data-model.md        # Phase 1 output
-├── quickstart.md        # Phase 1 output
-├── contracts/           # Phase 1 output
-│   └── openapi.yaml     # API Specification
-└── tasks.md             # Phase 2 output
+specs/[###-feature]/
+├── plan.md              # This file (/speckit.plan command output)
+├── research.md          # Phase 0 output (/speckit.plan command)
+├── data-model.md        # Phase 1 output (/speckit.plan command)
+├── quickstart.md        # Phase 1 output (/speckit.plan command)
+├── contracts/           # Phase 1 output (/speckit.plan command)
+└── tasks.md             # Phase 2 output (/speckit.tasks command - NOT created by /speckit.plan)
 ```
 
 ### Source Code (repository root)
+<!--
+  ACTION REQUIRED: Replace the placeholder tree below with the concrete layout
+  for this feature. Delete unused options and expand the chosen structure with
+  real paths (e.g., apps/admin, packages/something). The delivered plan must
+  not include Option labels.
+-->
 
 ```text
+# [REMOVE IF UNUSED] Option 1: Single project (DEFAULT)
 src/
-├── app/
-│   ├── (auth)/          # Sign-in/Sign-up pages
-│   ├── (dashboard)/     # Authenticated user dashboard
-│   ├── api/             # API Routes (auth, shortener, bulk)
-│   ├── [slug]/          # Redirection route (catch-all)
-│   └── page.tsx         # Landing page
-├── components/
-│   ├── ui/              # Shared UI components
-│   ├── features/        # Feature-specific components (QR, Charts)
-│   └── forms/           # React Hook Forms (Link creation)
-├── db/
-│   ├── schema.ts        # Database definitions
-│   └── client.ts        # Drizzle client
-├── lib/
-│   ├── analytics.ts     # Analytics tracking logic
-│   ├── qr-code.ts       # QR generation utility
-│   └── utils.ts         # Shared helpers
-└── middleware.ts        # Auth protection & Redirection logic
+├── models/
+├── services/
+├── cli/
+└── lib/
+
+tests/
+├── contract/
+├── integration/
+└── unit/
+
+# [REMOVE IF UNUSED] Option 2: Web application (when "frontend" + "backend" detected)
+backend/
+├── src/
+│   ├── models/
+│   ├── services/
+│   └── api/
+└── tests/
+
+frontend/
+├── src/
+│   ├── components/
+│   ├── pages/
+│   └── services/
+└── tests/
+
+# [REMOVE IF UNUSED] Option 3: Mobile + API (when "iOS/Android" detected)
+api/
+└── [same as backend above]
+
+ios/ or android/
+└── [platform-specific structure: feature modules, UI flows, platform tests]
 ```
 
-**Structure Decision**: Standard Next.js App Router structure with feature grouping in components and dedicated API routes. Redirection logic prioritized in middleware/Edge routes.
+**Structure Decision**: [Document the selected structure and reference the real
+directories captured above]
 
 ## Complexity Tracking
 
+> **Fill ONLY if Constitution Check has violations that must be justified**
+
 | Violation | Why Needed | Simpler Alternative Rejected Because |
 |-----------|------------|-------------------------------------|
-| N/A | | |
+| [e.g., 4th project] | [current need] | [why 3 projects insufficient] |
+| [e.g., Repository pattern] | [specific problem] | [why direct DB access insufficient] |

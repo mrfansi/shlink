@@ -11,7 +11,7 @@
 - [ ] T001 Create Next.js project structure with `npx create-next-app`
 - [ ] T002 [P] Configure Tailwind CSS v4 in `src/app/globals.css`
 - [ ] T003 [P] Configure Shadcn UI components in `components.json` and install core components
-- [ ] T004 [P] Initialize Cloudflare Wrangler configuration in `wrangler.jsonc` (D1, R2, KV bindings)
+- [ ] T004 [P] Initialize Cloudflare Wrangler configuration in `wrangler.jsonc` (D1, R2, KV, **Queues**, **Cron Triggers**) - _See research.md #1 & #9_
 - [ ] T005 install core dependencies (drizzle-orm, better-auth, lucide-react)
 
 ## Phase 2: Foundational (Blocking Prerequisites)
@@ -21,12 +21,12 @@
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
 - [ ] T006 Setup Drizzle configuration and client in `src/db/client.ts`
-- [ ] T007 Define database schema for Users, Accounts, Sessions, and Verification in `src/db/schema.ts`
-- [ ] T008 Implement Better Auth configuration with Drizzle adapter in `src/lib/auth.ts`
+- [ ] T007 Define database schema for Users, Accounts, Sessions, Verification, and **GlobalConfig** in `src/db/schema.ts` - _See data-model.md_
+- [ ] T008 Implement Better Auth configuration with Drizzle adapter in `src/lib/auth.ts` - _See research.md #Authorization_
 - [ ] T009 [P] Create Auth API route handler in `src/app/api/auth/[...all]/route.ts`
 - [ ] T010 [P] Create basic public layout in `src/app/layout.tsx`
 - [ ] T011 [P] Create dashboard layout shell in `src/app/(dashboard)/layout.tsx`
-- [ ] T012 Implement Middleware for Host based routing in `src/middleware.ts`
+- [ ] T012 Implement Middleware for Host based routing in `src/middleware.ts` - _See research.md #11 (Domain & Host Routing)_
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 
@@ -38,15 +38,15 @@
 
 ### Implementation for User Story 1
 
-- [ ] T013 [US1] Define `links` table in `src/db/schema.ts`
+- [ ] T013 [US1] Define `links` table in `src/db/schema.ts` - _See data-model.md #Link_
 - [ ] T014 [US1] Create migration for links table in `drizzle/migrations/`
 - [ ] T015 [US1] Implement Base62/Nanoid ID generator in `src/lib/utils.ts`
 - [ ] T016 [US1] Implement QR Code generation utility in `src/lib/qr-code.ts`
 - [ ] T017 [US1] Create Link Creation Server Action in `src/app/actions.ts`
 - [ ] T018 [US1] Implement Shortener Form component in `src/components/features/shortener-form.tsx`
 - [ ] T019 [US1] Integrate Shortener Form into Landing Page `src/app/page.tsx`
-- [ ] T020 [US1] Implement Redirection Logic in Middleware or Worker Route `src/middleware.ts` (or `src/app/[slug]/route.ts`)
-- [ ] T021 [US1] Implement Result Card component (Slug + QR) in `src/components/features/result-card.tsx`
+- [ ] T020 [US1] Implement Redirection Logic in Middleware or Worker Route `src/middleware.ts` - _See research.md #10 (Edge Cases) & #11_
+- [ ] T021 [US1] Implement Result Card component (Slug + QR) in `src/components/features/result-card.tsx` - _See research.md #QR Code Composite_
 
 **Checkpoint**: User Story 1 (MVP) fully functional. Public shortening and redirection works.
 
@@ -58,9 +58,9 @@
 
 ### Implementation for User Story 2
 
-- [ ] T022 [US2] Update Link Creation Action to handle optional custom slug in `src/app/actions.ts`
-- [ ] T023 [US2] Implement custom slug validation regex in `src/lib/validators.ts`
-- [ ] T024 [P] [US2] Update Shortener Form UI to include Custom Slug input in `src/components/features/shortener-form.tsx`
+- [ ] T022 [US2] Update Link Creation Action to handle optional custom slug in `src/app/actions.ts` - _See contracts/openapi.yaml #Schemas_
+- [ ] T023 [US2] Implement custom slug validation regex in `src/lib/validators.ts` - _See research.md #Logic_
+- [ ] T024 [P] [US2] Update Shortener Form UI to include Custom Slug & **UTM Builder** inputs in `src/components/features/shortener-form.tsx`
 - [ ] T025 [US2] Implement collision check logic in `src/db/queries.ts` (or within action)
 - [ ] T026 [US2] Add error handling for "Slug taken" in `src/components/features/shortener-form.tsx`
 
@@ -74,10 +74,10 @@
 
 ### Implementation for User Story 3
 
-- [ ] T027 [US3] Define `clicks` and `daily_link_stats` tables in `src/db/schema.ts`
+- [ ] T027 [US3] Define `clicks` and `daily_link_stats` tables in `src/db/schema.ts` - _See data-model.md #Analytics_
 - [ ] T028 [US3] Create migration for analytics tables in `drizzle/migrations/`
 - [ ] T029 [US3] Implement async click tracking in Middleware `src/middleware.ts`
-- [ ] T030 [US3] Implement Cron Job handler for aggregation in `src/app/api/cron/aggregate/route.ts`
+- [ ] T030 [US3] Implement Cron Job handler for aggregation **& old log pruning** in `src/app/api/cron/aggregate/route.ts` - _See research.md #9 (Aggregation)_
 - [ ] T031 [US3] Create Analytics Service to query stats in `src/lib/analytics.ts`
 - [ ] T032 [P] [US3] Create Charts components (Bar/Pie) using Recharts/Shadcn in `src/components/features/analytics-charts.tsx`
 - [ ] T033 [US3] Create Analytics View page in `src/app/(dashboard)/links/[id]/analytics/page.tsx`
@@ -99,6 +99,8 @@
 - [ ] T038 [P] [US4] Create Link List Table component in `src/components/features/link-list.tsx`
 - [ ] T039 [US4] Create Dashboard Home page in `src/app/(dashboard)/page.tsx`
 - [ ] T040 [US4] Implement Delete Link Action in `src/app/actions.ts`
+- [ ] T060 [US4] Implement Update Link Action (Target URL, Tags) in `src/app/actions.ts`
+- [ ] T061 [P] [US4] Create Edit Link Modal component in `src/components/features/edit-link-modal.tsx`
 - [ ] T041 [US4] Implement Tags management UI in `src/components/features/link-tags.tsx`
 
 **Checkpoint**: Auth Users can manage their own links.
@@ -115,7 +117,7 @@
 - [ ] T043 [US5] Implement Password/Expiration middleware check in `src/middleware.ts`
 - [ ] T044 [P] [US5] Create Password Interstitial Page in `src/app/password/[slug]/page.tsx`
 - [ ] T045 [US5] Implement Password Verification Action in `src/app/actions.ts`
-- [ ] T046 [US5] Implement Metadata Proxy endpoint in `src/app/api/metadata/route.ts`
+- [ ] T046 [US5] Implement Metadata Proxy endpoint in `src/app/api/metadata/route.ts` - _See contracts/internal.yaml_
 - [ ] T047 [US5] Create 404/Expired Link custom page in `src/app/not-found.tsx`
 
 **Checkpoint**: Advanced security features functional.
@@ -130,10 +132,10 @@
 
 - [ ] T048 [US6] Implement API Key generation in Dashboard `src/app/(dashboard)/settings/page.tsx`
 - [ ] T049 [US6] Create API Auth Middleware (Bearer Token) in `src/lib/api-auth.ts`
-- [ ] T050 [US6] Implement POST /api/shorten endpoint in `src/app/api/v1/shorten/route.ts`
-- [ ] T051 [US6] Implement CSV Parsing utility in `src/lib/csv.ts`
+- [ ] T050 [US6] Implement POST /api/shorten **(single & bulk)** endpoint in `src/app/api/v1/shorten/route.ts` - _See contracts/openapi.yaml_
+- [ ] T051 [US6] Implement CSV Parsing utility in `src/lib/csv.ts` - _See research.md #6_
 - [ ] T052 [US6] Create Bulk Upload UI in `src/app/(dashboard)/bulk/page.tsx`
-- [ ] T053 [US6] Implement Bulk Processing (Queue Consumer setup) in `src/workers/consumer.ts` (if using Worker) or Async Action
+- [ ] T053 [US6] Implement Hybrid Bulk Processing (Direct <1k + Queue >1k) in `src/workers/consumer.ts` - _See research.md #1_
 
 **Checkpoint**: API and Bulk tools ready.
 
@@ -146,6 +148,7 @@
 - [ ] T056 Run performance profiling on Redirection Middleware
 - [ ] T057 Verify accessibility (AHA) compliance
 - [ ] T058 Final documentation updates (API docs)
+- [ ] T059 Implement Rate Limiting Middleware (10 req/s) in `src/lib/rate-limit.ts` & `src/middleware.ts`
 
 ## Dependencies & Execution Order
 
