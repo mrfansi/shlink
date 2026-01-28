@@ -1,13 +1,23 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { rateLimit } from '@/lib/rate-limit';
 
 // Public routes that don't require authentication
 const publicRoutes = ['/sign-in', '/sign-up', '/api/auth'];
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const hostname = request.headers.get("host");
+  const ip = request.headers.get("x-forwarded-for") || "127.0.0.1";
   
+  // Rate Limiting for Writes (POST/PUT/DELETE) and API
+  if (request.method !== 'GET' || pathname.startsWith('/api')) {
+      const isAllowed = await rateLimit(ip, 10, 1);
+      if (!isAllowed) {
+          return new NextResponse("Too Many Requests", { status: 429 });
+      }
+  }
+
   // Remove port if present for local dev
   const domain = hostname?.split(":")[0];
   const shortDomain = process.env.NEXT_PUBLIC_SHORT_DOMAIN || "short.link";

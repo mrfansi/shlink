@@ -13,8 +13,29 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-	title: "Shlink - Modern URL Shortener",
-	description: "Open source URL shortener built with Next.js and Cloudflare Workers",
+	title: {
+		default: "Shlink - Modern URL Shortener",
+		template: "%s | Shlink",
+	},
+	description: "Open source enterprise-grade URL shortener built with Next.js and Cloudflare Workers. Features analytics, custom domains, and QR codes.",
+	keywords: ["url shortener", "link management", "analytics", "qr code", "open source"],
+	authors: [{ name: "Shlink Team" }],
+	creator: "Shlink Team",
+	openGraph: {
+		type: "website",
+		locale: "en_US",
+		url: "https://short.link",
+		title: "Shlink - Modern URL Shortener",
+		description: "Secure, fast, and reliable URL shortening for your business.",
+		siteName: "Shlink",
+	},
+	twitter: {
+		card: "summary_large_image",
+		title: "Shlink - Modern URL Shortener",
+		description: "Secure, fast, and reliable URL shortening for your business.",
+		creator: "@shlink",
+	},
+	metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
 };
 
 export default function RootLayout({

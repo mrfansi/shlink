@@ -146,12 +146,12 @@
 
 **Purpose**: Improvements that affect multiple user stories
 
-- [ ] T054 [P] Implement Global Settings (Logo Upload) in `src/app/(dashboard)/admin/page.tsx`
-- [ ] T055 [P] Optimize SEO metadata for all public pages
+- [x] T054 [P] Implement Global Settings (Logo Upload) in `src/app/(dashboard)/admin/page.tsx`
+- [x] T055 [P] Optimize SEO metadata for all public pages
 - [ ] T056 Run performance profiling on Redirection Middleware
 - [ ] T057 Verify accessibility (AHA) compliance
 - [ ] T058 Final documentation updates (API docs)
-- [ ] T059 Implement Rate Limiting Middleware (10 req/s) in `src/lib/rate-limit.ts` & `src/middleware.ts`
+- [x] T059 Implement Rate Limiting Middleware (10 req/s) in `src/lib/rate-limit.ts` & `src/middleware.ts`
 
 ## Dependencies & Execution Order
 
