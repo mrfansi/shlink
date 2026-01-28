@@ -14,28 +14,25 @@ export function middleware(request: NextRequest) {
 
   // Host-based routing
   if (domain === shortDomain) {
-    // URL Shortener Logic
-    // For now, simply allow the request to proceed (T020 will implement redirection)
+    // If we are on the short domain, every path is potentially a short link
+    // We let the Route Handler ([slug]) take care of it
     return NextResponse.next();
   }
 
   // Dashboard / Admin App Logic
-  // Check for auth session cookie
+  const protectedRoutes = ['/dashboard', '/admin', '/settings'];
+  const isProtectedRoute = protectedRoutes.some(route => pathname.startsWith(route));
+  
   const sessionToken = request.cookies.get('better-auth.session_token');
   
-  // Allow public routes
-  if (publicRoutes.some(route => pathname.startsWith(route))) {
-    return NextResponse.next();
-  }
-  
-  // If no session token and not on public route, redirect to sign-in
-  if (!sessionToken) {
+  // If no session token and trying to access protected route, redirect to sign-in
+  if (isProtectedRoute && !sessionToken) {
     const signInUrl = new URL('/sign-in', request.url);
     signInUrl.searchParams.set('from', pathname);
     return NextResponse.redirect(signInUrl);
   }
   
-  // If has session token and on auth pages, redirect to home
+  // If has session token and on auth pages, redirect to home (or dashboard)
   if (sessionToken && (pathname === '/sign-in' || pathname === '/sign-up')) {
     return NextResponse.redirect(new URL('/', request.url));
   }

@@ -38,15 +38,15 @@
 
 ### Implementation for User Story 1
 
-- [ ] T013 [US1] Define `links` table in `src/db/schema.ts` - _See data-model.md #Link_
-- [ ] T014 [US1] Create migration for links table in `drizzle/migrations/`
-- [ ] T015 [US1] Implement Base62/Nanoid ID generator in `src/lib/utils.ts`
-- [ ] T016 [US1] Implement QR Code generation utility in `src/lib/qr-code.ts`
-- [ ] T017 [US1] Create Link Creation Server Action in `src/app/actions.ts`
-- [ ] T018 [US1] Implement Shortener Form component in `src/components/features/shortener-form.tsx`
-- [ ] T019 [US1] Integrate Shortener Form into Landing Page `src/app/page.tsx`
-- [ ] T020 [US1] Implement Redirection Logic in Middleware or Worker Route `src/middleware.ts` - _See research.md #10 (Edge Cases) & #11_
-- [ ] T021 [US1] Implement Result Card component (Slug + QR) in `src/components/features/result-card.tsx` - _See research.md #QR Code Composite_
+- [x] T013 [US1] Define `links` table in `src/db/schema.ts` - _See data-model.md #Link_
+- [x] T014 [US1] Create migration for links table in `drizzle/migrations/`
+- [x] T015 [US1] Implement Base62/Nanoid ID generator in `src/lib/utils.ts`
+- [x] T016 [US1] Implement QR Code generation utility in `src/lib/qr-code.ts`
+- [x] T017 [US1] Create Link Creation Server Action in `src/app/actions.ts`
+- [x] T018 [US1] Implement Shortener Form component in `src/components/features/shortener-form.tsx`
+- [x] T019 [US1] Integrate Shortener Form into Landing Page `src/app/page.tsx`
+- [x] T020 [US1] Implement Redirection Logic in Middleware or Worker Route `src/middleware.ts` - _See research.md #10 (Edge Cases) & #11_
+- [x] T021 [US1] Implement Result Card component (Slug + QR) in `src/components/features/result-card.tsx` - _See research.md #QR Code Composite_
 
 **Checkpoint**: User Story 1 (MVP) fully functional. Public shortening and redirection works.
 

@@ -66,3 +66,20 @@ export type Session = typeof session.$inferSelect;
 export type Account = typeof account.$inferSelect;
 export type Verification = typeof verification.$inferSelect;
 export type GlobalConfig = typeof globalConfig.$inferSelect;
+
+export const links = sqliteTable("links", {
+	id: text("id").primaryKey(),
+	slug: text("slug").notNull().unique(),
+	originalUrl: text("original_url").notNull(),
+	userId: text("user_id").references(() => user.id),
+	createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
+	expiresAt: integer("expires_at", { mode: "timestamp" }),
+	passwordHash: text("password_hash"),
+	isActive: integer("is_active", { mode: "boolean" }).default(true),
+	tags: text("tags", { mode: "json" }).$type<string[]>(),
+	metadata: text("metadata", { mode: "json" }).$type<Record<string, any>>(),
+	clickCount: integer("click_count").default(0),
+});
+
+export type Link = typeof links.$inferSelect;
+export type NewLink = typeof links.$inferInsert;
