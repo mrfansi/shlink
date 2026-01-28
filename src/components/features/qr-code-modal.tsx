@@ -11,9 +11,10 @@ interface QRCodeModalProps {
     items: string; // The URL
     open: boolean;
     onClose: () => void;
+    logoUrl?: string;
 }
 
-export function QRCodeModal({ slug, items, open, onClose }: QRCodeModalProps) {
+export function QRCodeModal({ slug, items, open, onClose, logoUrl }: QRCodeModalProps) {
     const downloadQR = () => {
         const svg = document.getElementById("qr-code-svg");
         if (!svg) return;
@@ -25,7 +26,12 @@ export function QRCodeModal({ slug, items, open, onClose }: QRCodeModalProps) {
         img.onload = () => {
             canvas.width = img.width;
             canvas.height = img.height;
-            ctx?.drawImage(img, 0, 0);
+            // Draw white background
+            if (ctx) {
+                ctx.fillStyle = "white";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(img, 0, 0);
+            }
             const pngFile = canvas.toDataURL("image/png");
             
             const downloadLink = document.createElement("a");
@@ -51,11 +57,17 @@ export function QRCodeModal({ slug, items, open, onClose }: QRCodeModalProps) {
                             size={200}
                             level={"H"}
                             includeMargin={true}
+                            imageSettings={logoUrl ? {
+                                src: logoUrl,
+                                height: 40,
+                                width: 40,
+                                excavate: true,
+                            } : undefined}
                         />
                      </div>
                      <div className="flex gap-2 w-full">
                          <Button className="flex-1" onClick={downloadQR}>
-                             <Download className="mr-2 h-4 w-4" /> Download
+                             <Download className="mr-2 h-4 w-4" /> Download PNG
                          </Button>
                      </div>
                 </div>

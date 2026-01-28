@@ -28,6 +28,19 @@ export async function GET(
     });
 
     if (result) {
+      // 0. Bot Detection for Metadata
+      const userAgent = request.headers.get("user-agent")?.toLowerCase() || "";
+      const isBot = /facebookexternalhit|twitterbot|linkedinbot|whatsapp|telegrambot|discordbot|slackbot|skypeuripreview|iframely/.test(userAgent);
+      
+      if (isBot) {
+           // Redirect to Metadata Proxy which returns static HTML with tags
+           // We use the original URL as the source for metadata
+           const proxyUrl = request.nextUrl.clone();
+           proxyUrl.pathname = "/api/metadata";
+           proxyUrl.searchParams.set("url", result.originalUrl);
+           return NextResponse.redirect(proxyUrl);
+      }
+
       // 1. Check Expiration
       if (result.expiresAt && result.expiresAt < new Date()) {
           const url = request.nextUrl.clone();

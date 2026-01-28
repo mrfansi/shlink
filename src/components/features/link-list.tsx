@@ -12,6 +12,7 @@ import { deleteLink } from "@/app/actions";
 interface LinkListProps {
   links: DBLink[];
   baseUrl: string; // To construct full short URL
+  logoUrl?: string; // Global logo URL
 }
 
 import { Edit2, QrCode } from "lucide-react";
@@ -19,7 +20,7 @@ import { useState } from "react";
 import { EditLinkModal } from "./edit-link-modal";
 import { QRCodeModal } from "./qr-code-modal";
 
-export function LinkList({ links, baseUrl }: LinkListProps) {
+export function LinkList({ links, baseUrl, logoUrl }: LinkListProps) {
   const router = useRouter();
   const [editingLink, setEditingLink] = useState<DBLink | null>(null);
   const [qrLink, setQrLink] = useState<{slug: string, url: string} | null>(null);
@@ -125,6 +126,7 @@ export function LinkList({ links, baseUrl }: LinkListProps) {
             items={qrLink.url}
             open={!!qrLink}
             onClose={() => setQrLink(null)}
+            logoUrl={logoUrl}
         />
     )}
     </>

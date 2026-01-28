@@ -42,9 +42,11 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(signInUrl);
   }
   
-  // If has session token and on auth pages, redirect to home (or dashboard)
-  if (sessionToken && (pathname === '/sign-in' || pathname === '/sign-up')) {
-    return NextResponse.redirect(new URL('/', request.url));
+  // If has session token
+  if (sessionToken) {
+      if (pathname === '/sign-in' || pathname === '/sign-up' || pathname === '/') {
+           return NextResponse.redirect(new URL('/dashboard', request.url));
+      }
   }
   
   return NextResponse.next();

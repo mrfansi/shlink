@@ -6,6 +6,7 @@ interface QRCodeOptions {
     dark?: string;
     light?: string;
   };
+  logoUrl?: string;
 }
 
 export async function generateQRCode(
@@ -18,6 +19,7 @@ export async function generateQRCode(
       dark: '#000000',
       light: '#ffffff00', // Transparent background
     },
+    logoUrl,
   } = options;
 
   try {
@@ -28,6 +30,10 @@ export async function generateQRCode(
       errorCorrectionLevel: 'H', // High error correction to allow for logo embedding
     });
 
+    if (logoUrl) {
+        return embedLogoInQR(svg, logoUrl);
+    }
+
     return svg;
   } catch (err) {
     console.error('Error generating QR code:', err);
@@ -37,35 +43,34 @@ export async function generateQRCode(
 
 /**
  * Embeds a logo into a QR code SVG string.
- * This is a string manipulation implementation.
- * @param svg The QR code SVG string
- * @param logoUrl The URL or Base64 data of the logo
- * @param logoSizePercentage The size of the logo relative to the QR code (default 20%)
  */
 export function embedLogoInQR(svg: string, logoUrl: string, logoSizePercentage = 20): string {
-  // Simple heuristic to inject an image tag. 
-  // We rely on the fact that qrcode SVG output usually has a specific structure.
-  // A better approach would be XML parsing, but that might be heavy for Edge.
-  
-  // Find the closing </svg> tag
-  const closeTagIndex = svg.lastIndexOf('</svg>');
-  if (closeTagIndex === -1) return svg;
+  // Extract viewBox to calculate center
+  const viewBoxMatch = svg.match(/viewBox="([\d\s\.-]+)"/);
+  if (!viewBoxMatch) return svg;
 
-  // We need to calculate center position. 
-  // Standard qrcode svg usually sets width/height or viewBox.
-  // For simplicity valid SVG injection:
-  // <image x="center" y="center" width="size" height="size" href="url" />
+  const parts = viewBoxMatch[1].split(/\s+/).map(Number);
+  if (parts.length < 4) return svg;
+
+  // viewBox = min-x min-y width height
+  const [vx, vy, vw, vh] = parts;
   
-  // However, without parsing viewBox, centering is hard.
-  // The `qrcode` lib generates paths.
-  // Let's assume standard viewbox usage or wait until we see the output.
+  // Calculate Logo dimensions and position
+  // We assume square QR
+  const logoSize = vw * (logoSizePercentage / 100);
+  const x = vx + (vw - logoSize) / 2;
+  const y = vy + (vh - logoSize) / 2;
+
+  // Create Image Tag
+  // Using both href (modern) and xlink:href (legacy) for compatibility
+  // Also we add a white background rect behind the logo for better visibility
+  const bgSize = logoSize * 1.1;
+  const bgX = vx + (vw - bgSize) / 2;
+  const bgY = vy + (vh - bgSize) / 2;
+
+  const bgRect = `<rect x="${bgX}" y="${bgY}" width="${bgSize}" height="${bgSize}" fill="white" rx="${bgSize * 0.1}"/>`;
+  const imageTag = `<image href="${logoUrl}" xlink:href="${logoUrl}" x="${x}" y="${y}" height="${logoSize}" width="${logoSize}" preserveAspectRatio="xMidYMid slice"/>`;
   
-  // For now, I will leave this function as a placeholder/todo or simple implementation
-  // if we assume specific output format. 
-  // Given only text manipulation, let's just return the SVG for now and implement
-  // robust embedding if requested or if we can parse viewBox.
-  
-  // NOTE: A more robust way for the future is using a library or ensuring we know the viewBox.
-  
-  return svg; 
+  // Inject before close tag
+  return svg.replace('</svg>', `${bgRect}${imageTag}</svg>`);
 }
