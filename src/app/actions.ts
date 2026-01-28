@@ -10,6 +10,7 @@ import { headers } from "next/headers";
 
 import { customSlugSchema, utmParamsSchema } from "@/lib/validators";
 import { eq } from "drizzle-orm";
+import { getAuth } from "@/lib/auth";
 
 const createLinkSchema = z.object({
   originalUrl: z.string().url("Invalid URL provided"),
@@ -91,10 +92,17 @@ export async function createLink(formData: FormData): Promise<CreateLinkResult> 
     // Safety check just in case logic failed
     if (!slug) throw new Error("Slug generation failed");
 
+    // Get Auth Session
+    const auth = await getAuth();
+    const session = await auth.api.getSession({
+        headers: await headers()
+    });
+
     await db.insert(links).values({
       id: crypto.randomUUID(),
       slug,
       originalUrl: finalUrl.toString(),
+      userId: session?.user?.id,
       createdAt: new Date(),
       isActive: true,
       clickCount: 0
@@ -118,5 +126,37 @@ export async function createLink(formData: FormData): Promise<CreateLinkResult> 
   } catch (error) {
     console.error("Failed to create link:", error);
     return { success: false, error: "Failed to create short link. Please try again." };
+  }
+}
+
+export async function deleteLink(linkId: string) {
+  try {
+    const auth = await getAuth();
+    const session = await auth.api.getSession({ headers: await headers() });
+    
+    if (!session) {
+      return { success: false, error: "Unauthorized" };
+    }
+
+    const context = await getCloudflareContext({ async: true });
+    const env = context.env as unknown as Env;
+    const db = createDb(env);
+
+    const link = await db.query.links.findFirst({
+        where: (links, { eq }) => eq(links.id, linkId),
+    });
+
+    if (!link) return { success: false, error: "Link not found" };
+
+    if (link.userId !== session.user.id) {
+        return { success: false, error: "Unauthorized" };
+    }
+
+    await db.delete(links).where(eq(links.id, linkId));
+    
+    return { success: true };
+  } catch (error) {
+      console.error("Delete failed:", error);
+      return { success: false, error: "Delete failed" };
   }
 }

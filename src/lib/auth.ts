@@ -23,6 +23,12 @@ export const getAuth = async () => {
     emailAndPassword: {
       enabled: true,
     },
+    socialProviders: {
+      github: {
+        clientId: (env as any).GITHUB_CLIENT_ID || "",
+        clientSecret: (env as any).GITHUB_CLIENT_SECRET || "",
+      },
+    },
     secret: (env as any).BETTER_AUTH_SECRET || "development-secret",
     plugins: [
       jwt({

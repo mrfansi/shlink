@@ -93,12 +93,12 @@
 
 ### Implementation for User Story 4
 
-- [ ] T035 [US4] Create Sign In / Sign Up pages in `src/app/(auth)/sign-in/page.tsx` & `sign-up/page.tsx`
-- [ ] T036 [US4] Update Link Creation to associate `user_id` if authenticated in `src/app/actions.ts`
-- [ ] T037 [US4] Implement "My Links" data fetching in `src/db/queries.ts`
-- [ ] T038 [P] [US4] Create Link List Table component in `src/components/features/link-list.tsx`
-- [ ] T039 [US4] Create Dashboard Home page in `src/app/(dashboard)/page.tsx`
-- [ ] T040 [US4] Implement Delete Link Action in `src/app/actions.ts`
+- [x] T035 [US4] Create Sign In Page using Better Auth client in `src/app/(auth)/sign-in/page.tsx`
+- [x] T036 [US4] Create Sign Up Page using Better Auth client in `src/app/(auth)/sign-up/page.tsx`
+- [x] T037 [US4] Update Auth Configuration to support GitHub & Email/Pass in `src/lib/auth.ts`.ts`
+- [x] T038 [P] [US4] Create Link List Table component in `src/components/features/link-list.tsx`
+- [x] T039 [US4] Create Dashboard Home page in `src/app/(dashboard)/page.tsx`
+- [x] T040 [US4] Implement Delete Link Action in `src/app/actions.ts`
 - [ ] T060 [US4] Implement Update Link Action (Target URL, Tags) in `src/app/actions.ts`
 - [ ] T061 [P] [US4] Create Edit Link Modal component in `src/components/features/edit-link-modal.tsx`
 - [ ] T041 [US4] Implement Tags management UI in `src/components/features/link-tags.tsx`
