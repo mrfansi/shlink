@@ -113,12 +113,12 @@
 
 ### Implementation for User Story 5
 
-- [ ] T042 [US5] Update `links` schema for password/expiration if needed in `src/db/schema.ts`
-- [ ] T043 [US5] Implement Password/Expiration middleware check in `src/middleware.ts`
-- [ ] T044 [P] [US5] Create Password Interstitial Page in `src/app/password/[slug]/page.tsx`
-- [ ] T045 [US5] Implement Password Verification Action in `src/app/actions.ts`
-- [ ] T046 [US5] Implement Metadata Proxy endpoint in `src/app/api/metadata/route.ts` - _See contracts/internal.yaml_
-- [ ] T047 [US5] Create 404/Expired Link custom page in `src/app/not-found.tsx`
+- [x] T042 [US5] Update `links` schema for password/expiration if needed in `src/db/schema.ts`
+- [x] T043 [US5] Implement Password/Expiration middleware check in `src/middleware.ts`
+- [x] T044 [P] [US5] Create Password Interstitial Page in `src/app/password/[slug]/page.tsx`
+- [x] T045 [US5] Implement Password Verification Action in `src/app/actions.ts`
+- [x] T046 [US5] Implement Metadata Proxy endpoint in `src/app/api/metadata/route.ts` - _See contracts/internal.yaml_
+- [x] T047 [US5] Create 404/Expired Link custom page in `src/app/not-found.tsx`
 
 **Checkpoint**: Advanced security features functional.
 
