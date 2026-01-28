@@ -74,14 +74,14 @@
 
 ### Implementation for User Story 3
 
-- [ ] T027 [US3] Define `clicks` and `daily_link_stats` tables in `src/db/schema.ts` - _See data-model.md #Analytics_
-- [ ] T028 [US3] Create migration for analytics tables in `drizzle/migrations/`
-- [ ] T029 [US3] Implement async click tracking in Middleware `src/middleware.ts`
-- [ ] T030 [US3] Implement Cron Job handler for aggregation **& old log pruning** in `src/app/api/cron/aggregate/route.ts` - _See research.md #9 (Aggregation)_
-- [ ] T031 [US3] Create Analytics Service to query stats in `src/lib/analytics.ts`
-- [ ] T032 [P] [US3] Create Charts components (Bar/Pie) using Recharts/Shadcn in `src/components/features/analytics-charts.tsx`
-- [ ] T033 [US3] Create Analytics View page in `src/app/(dashboard)/links/[id]/analytics/page.tsx`
-- [ ] T034 [US3] Implement CSV Export Server Action in `src/app/actions/analytics.ts`
+- [x] T027 [US3] Define `clicks` and `daily_link_stats` tables in `src/db/schema.ts` - _See data-model.md #Analytics_
+- [x] T028 [US3] Create migration for analytics tables in `drizzle/migrations/`
+- [x] T029 [US3] Implement async click tracking in Middleware `src/middleware.ts` (Implemented in Route Handler `src/app/[slug]/route.ts` for better compatibility)
+- [x] T030 [US3] Implement Cron Job handler for aggregation **& old log pruning** in `src/app/api/cron/aggregate/route.ts` - _See research.md #9 (Aggregation)_
+- [x] T031 [US3] Create Analytics Service to query stats in `src/lib/analytics.ts`
+- [x] T032 [P] [US3] Create Charts components (Bar/Pie) using Recharts/Shadcn in `src/components/features/analytics-charts.tsx`
+- [x] T033 [US3] Create Analytics View page in `src/app/(dashboard)/links/[id]/analytics/page.tsx`
+- [x] T034 [US3] Implement CSV Export Server Action in `src/app/actions/analytics.ts`
 
 **Checkpoint**: Click tracking active, aggregation working, charts visible.
 

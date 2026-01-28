@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { createDb, type Env } from "@/db/client";
+import { trackClick } from "@/lib/analytics";
 
 export async function GET(
   request: NextRequest, 
@@ -27,6 +28,17 @@ export async function GET(
     });
 
     if (result && result.originalUrl) {
+      // Async Analytics Tracking
+      // We pass the promise to waitUntil so it doesn't block the response
+      context.ctx.waitUntil(trackClick(env, {
+         slug,
+         userAgent: request.headers.get("user-agent") || "",
+         ip: request.headers.get("x-forwarded-for") || "127.0.0.1",
+         country: (request as any).cf?.country,
+         city: (request as any).cf?.city,
+         referrer: request.headers.get("referer") || undefined
+      }));
+
       return NextResponse.redirect(result.originalUrl);
     }
     

@@ -83,3 +83,29 @@ export const links = sqliteTable("links", {
 
 export type Link = typeof links.$inferSelect;
 export type NewLink = typeof links.$inferInsert;
+
+export const clicks = sqliteTable("clicks", {
+	id: text("id").primaryKey(),
+	linkId: text("link_id").references(() => links.id),
+	timestamp: integer("timestamp", { mode: "timestamp" }).notNull(),
+	country: text("country"),
+	city: text("city"),
+	deviceType: text("device_type"),
+	browser: text("browser"),
+	os: text("os"),
+	referrer: text("referrer"),
+	ipAddress: text("ip_address"), // Anonymized
+});
+
+export const dailyLinkStats = sqliteTable("daily_link_stats", {
+	id: text("id").primaryKey(),
+	linkId: text("link_id").references(() => links.id),
+	date: text("date").notNull(), // YYYY-MM-DD
+	clicks: integer("clicks").notNull().default(0),
+	metadata: text("metadata", { mode: "json" }).$type<Record<string, number>>(), // JSON breakdown
+});
+
+export type Click = typeof clicks.$inferSelect;
+export type NewClick = typeof clicks.$inferInsert;
+export type DailyLinkStat = typeof dailyLinkStats.$inferSelect;
+export type NewDailyLinkStat = typeof dailyLinkStats.$inferInsert;
