@@ -99,9 +99,9 @@
 - [x] T038 [P] [US4] Create Link List Table component in `src/components/features/link-list.tsx`
 - [x] T039 [US4] Create Dashboard Home page in `src/app/(dashboard)/page.tsx`
 - [x] T040 [US4] Implement Delete Link Action in `src/app/actions.ts`
-- [ ] T060 [US4] Implement Update Link Action (Target URL, Tags) in `src/app/actions.ts`
-- [ ] T061 [P] [US4] Create Edit Link Modal component in `src/components/features/edit-link-modal.tsx`
-- [ ] T041 [US4] Implement Tags management UI in `src/components/features/link-tags.tsx`
+- [x] T060 [US4] Implement Update Link Action (Target URL, Tags) in `src/app/actions.ts`
+- [x] T061 [P] [US4] Create Edit Link Modal component in `src/components/features/edit-link-modal.tsx`
+- [x] T041 [US4] Implement Tags management UI in `src/components/features/link-tags.tsx`
 
 **Checkpoint**: Auth Users can manage their own links.
 
@@ -136,6 +136,9 @@
 - [x] T051 [US6] Implement API Auth Middleware (Bearer Token)
 - [x] T052 [US6] Create Bulk Upload UI component in `src/components/features/bulk-uploader.tsx`
 - [x] T053 [US6] Implement Bulk Create sever action in `src/app/actions/bulk.ts` + Queue >1k) in `src/workers/consumer.ts` - _See research.md #1_
+- [x] T054 [US7] Implement QR Code UI (View/Download) in `src/components/features/qr-code-modal.tsx`
+- [x] T055 [US7] Implement Custom Domains UI (Placeholder/Settings) in `src/app/(dashboard)/settings/domains/page.tsx`
+- [ ] T056 [US7] Update Middleware to handle Custom Domains lookup - _See research.md #CustomDomains_
 
 **Checkpoint**: API and Bulk tools ready.
 

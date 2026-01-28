@@ -14,8 +14,15 @@ interface LinkListProps {
   baseUrl: string; // To construct full short URL
 }
 
+import { Edit2, QrCode } from "lucide-react";
+import { useState } from "react";
+import { EditLinkModal } from "./edit-link-modal";
+import { QRCodeModal } from "./qr-code-modal";
+
 export function LinkList({ links, baseUrl }: LinkListProps) {
   const router = useRouter();
+  const [editingLink, setEditingLink] = useState<DBLink | null>(null);
+  const [qrLink, setQrLink] = useState<{slug: string, url: string} | null>(null);
 
   const copyToClipboard = (slug: string) => {
     const url = `${baseUrl}/${slug}`;
@@ -44,6 +51,7 @@ export function LinkList({ links, baseUrl }: LinkListProps) {
   }
 
   return (
+    <>
     <div className="rounded-md border">
       <Table>
         <TableHeader>
@@ -68,6 +76,7 @@ export function LinkList({ links, baseUrl }: LinkListProps) {
                     <Button size="icon" variant="ghost" className="h-6 w-6" onClick={() => copyToClipboard(link.slug)}>
                       <Copy className="h-3 w-3" />
                     </Button>
+                    {!link.isActive && <span className="text-xs text-destructive ml-2">(Inactive)</span>}
                   </div>
                 </TableCell>
                 <TableCell className="max-w-[200px] truncate" title={link.originalUrl}>
@@ -79,6 +88,12 @@ export function LinkList({ links, baseUrl }: LinkListProps) {
                 </TableCell>
                 <TableCell className="text-right">
                   <div className="flex justify-end gap-2">
+                    <Button size="icon" variant="ghost" onClick={() => setQrLink({ slug: link.slug, url: shortUrl })}>
+                      <QrCode className="h-4 w-4" />
+                    </Button>
+                    <Button size="icon" variant="ghost" onClick={() => setEditingLink(link)}>
+                      <Edit2 className="h-4 w-4" />
+                    </Button>
                     <Button size="icon" variant="ghost" asChild>
                       <Link href={`/links/${link.id}/analytics`}>
                         <BarChart2 className="h-4 w-4" />
@@ -95,5 +110,23 @@ export function LinkList({ links, baseUrl }: LinkListProps) {
         </TableBody>
       </Table>
     </div>
+    
+    {editingLink && (
+        <EditLinkModal 
+            link={editingLink} 
+            open={!!editingLink} 
+            onClose={() => setEditingLink(null)} 
+        />
+    )}
+
+    {qrLink && (
+        <QRCodeModal
+            slug={qrLink.slug}
+            items={qrLink.url}
+            open={!!qrLink}
+            onClose={() => setQrLink(null)}
+        />
+    )}
+    </>
   );
 }
