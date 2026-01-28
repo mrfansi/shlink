@@ -17,6 +17,36 @@ export async function bulkCreateLinks(rows: CsvRow[]) {
     const session = await auth.api.getSession({ headers: await headers() });
     if (!session) return { success: false, error: "Unauthorized" };
 
+    if (rows.length > 1000) {
+        try {
+            const context = await getCloudflareContext({ async: true });
+            const env = context.env as unknown as Env;
+            
+            if (env.shlink_queue) {
+                 const chunkSize = 100;
+                 
+                 for (let i = 0; i < rows.length; i += chunkSize) {
+                     const batchRows = rows.slice(i, i + chunkSize);
+                     
+                     // Send batch of individual messages to queue
+                     await env.shlink_queue.sendBatch(batchRows.map(row => ({
+                        body: {
+                            userId: session.user.id,
+                            url: row.url,
+                            slug: row.slug
+                        },
+                        contentType: "json"
+                     })));
+                 }
+                 
+                 return { success: true, message: "Large batch accepted for background processing." };
+            }
+        } catch (e) {
+            console.error("Queue error:", e);
+            return { success: false, error: "Failed to queue large batch" };
+        }
+    }
+
     try {
         const context = await getCloudflareContext({ async: true });
         const env = context.env as unknown as Env;

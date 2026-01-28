@@ -1,47 +1,129 @@
-# OpenNext Starter
+# Shlink - URL Shortener
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+A modern, high-performance URL shortener built for internal use. Developed with Next.js, Cloudflare Workers, D1, and R2.
+
+## Features
+
+- **Shorten URLs**: Generate short links with random or custom slugs.
+- **QR Codes**: Auto-generated QR codes for every link.
+- **Analytics**: Track clicks, geolocation, and device types.
+- **Authentication**: Secure login via Email/Password or GitHub.
+- **Link Management**: Dashboard to view, edit, and delete links.
+- **Security**: Password protection and password-protected links.
+- **API**: Public API for programmatic link creation.
+- **Bulk Operations**: Bulk upload via CSV.
+- **Custom Domains**: (Coming Soon) Support for branded domains.
+
+## Tech Stack
+
+- **Framework**: [Next.js](https://nextjs.org/) (App Router)
+- **Runtime**: [Cloudflare Workers](https://workers.cloudflare.com/) (via OpenNext)
+- **Database**: Cloudflare D1 (SQLite)
+- **Storage**: Cloudflare R2 (Assets), KV (Rate Limiting)
+- **ORM**: [Drizzle ORM](https://orm.drizzle.team/)
+- **Auth**: [Better Auth](https://better-auth.com/)
+- **Styling**: Tailwind CSS v4 + Shadcn UI
 
 ## Getting Started
 
-Read the documentation at https://opennext.js.org/cloudflare.
+### Prerequisites
 
-## Develop
+- Node.js 20+
+- Cloudflare Account
+- Wrangler CLI (`npm i -g wrangler`)
 
-Run the Next.js development server:
+### Local Development
 
-```bash
-npm run dev
-# or similar package manager command
+1.  **Install Dependencies**:
+
+    ```bash
+    npm install
+    ```
+
+2.  **Setup Environment**:
+    Copy `.env.example` to `.env` (if provided) or set the following variables:
+
+    ```bash
+    BETTER_AUTH_SECRET=your_secret
+    BETTER_AUTH_URL=http://localhost:3000
+    NEXT_PUBLIC_APP_URL=http://localhost:3000
+    NEXT_PUBLIC_SHORT_DOMAIN=short.link
+    ```
+
+3.  **Run Migrations (Local)**:
+
+    ```bash
+    npm run db:migrate:local
+    ```
+
+4.  **Start Development Server**:
+    ```bash
+    npm run dev
+    ```
+
+### Deployment
+
+1.  **Deploy to Cloudflare**:
+
+    ```bash
+    npm run deploy
+    ```
+
+2.  **Run Migrations (Production)**:
+    ```bash
+    npm run db:migrate:prod
+    ```
+
+## API Documentation
+
+The API allows you to programmatically shorten URLs.
+
+**Base URL**: `https://<your-domain>/api/v1`
+
+### Authentication
+
+Include your API Key in the `Authorization` header:
+
+```
+Authorization: Bearer <your_api_key>
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+You can generate an API key from the **Settings** page in the dashboard.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Endpoints
 
-## Preview
+#### Create Short Link
 
-Preview the application locally on the Cloudflare runtime:
+**POST** `/shorten`
 
-```bash
-npm run preview
-# or similar package manager command
+**Body** (JSON):
+
+```json
+{
+  "url": "https://example.com/very/long/url",
+  "slug": "custom-alias", // Optional
+  "expiresAt": "2025-12-31T23:59:59Z", // Optional
+  "password": "secret-password" // Optional
+}
 ```
 
-## Deploy
+**Response** (200 OK):
 
-Deploy the application to Cloudflare:
-
-```bash
-npm run deploy
-# or similar package manager command
+```json
+{
+  "shortUrl": "https://short.link/custom-alias",
+  "slug": "custom-alias",
+  "qrCode": "data:image/svg+xml;base64,..."
+}
 ```
 
-## Learn More
+## Contributing
 
-To learn more about Next.js, take a look at the following resources:
+1.  Fork the repository.
+2.  Create a feature branch.
+3.  Commit your changes.
+4.  Open a Pull Request.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## License
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+MIT

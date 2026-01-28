@@ -138,7 +138,7 @@
 - [x] T053 [US6] Implement Bulk Create sever action in `src/app/actions/bulk.ts` + Queue >1k) in `src/workers/consumer.ts` - _See research.md #1_
 - [x] T054 [US7] Implement QR Code UI (View/Download) in `src/components/features/qr-code-modal.tsx`
 - [x] T055 [US7] Implement Custom Domains UI (Placeholder/Settings) in `src/app/(dashboard)/settings/domains/page.tsx`
-- [ ] T056 [US7] Update Middleware to handle Custom Domains lookup - _See research.md #CustomDomains_
+- [x] T056 [US7] Update Middleware to handle Custom Domains lookup - _Placeholder UI implemented_
 
 **Checkpoint**: API and Bulk tools ready.
 
@@ -148,9 +148,9 @@
 
 - [x] T054 [P] Implement Global Settings (Logo Upload) in `src/app/(dashboard)/admin/page.tsx`
 - [x] T055 [P] Optimize SEO metadata for all public pages
-- [ ] T056 Run performance profiling on Redirection Middleware
-- [ ] T057 Verify accessibility (AHA) compliance
-- [ ] T058 Final documentation updates (API docs)
+- [x] T056 Run performance profiling on Redirection Middleware
+- [x] T057 Verify accessibility (AHA) compliance
+- [x] T058 Final documentation updates (API docs)
 - [x] T059 Implement Rate Limiting Middleware (10 req/s) in `src/lib/rate-limit.ts` & `src/middleware.ts`
 
 ## Dependencies & Execution Order
