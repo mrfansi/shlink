@@ -12,11 +12,18 @@ interface ShortenerFormProps {
   onSuccess?: (result: CreateLinkResult & { success: true }) => void;
 }
 
+import { ChevronsUpDown } from "lucide-react";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+
+// ... existing code
+
 export function ShortenerForm({ onSuccess }: ShortenerFormProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isOpen, setIsOpen] = useState(false);
 
   async function handleSubmit(formData: FormData) {
+    // ... same handleSubmit logic
     setLoading(true);
     setError(null);
     
@@ -57,6 +64,45 @@ export function ShortenerForm({ onSuccess }: ShortenerFormProps) {
               />
             </div>
           </div>
+
+          <Collapsible open={isOpen} onOpenChange={setIsOpen} className="space-y-2">
+             <CollapsibleTrigger asChild>
+                <Button variant="ghost" size="sm" type="button" className="w-full flex justify-between">
+                   Advanced Options <ChevronsUpDown className="h-4 w-4" />
+                </Button>
+             </CollapsibleTrigger>
+             <CollapsibleContent className="space-y-4 pt-2">
+                <div className="space-y-2">
+                   <Label htmlFor="slug">Custom Slug (Optional)</Label>
+                   <Input 
+                      id="slug" 
+                      name="slug" 
+                      placeholder="e.g. my-custom-link" 
+                      pattern="^[a-zA-Z0-9_-]{3,50}$"
+                      title="3-50 characters, letters, numbers, hyphens, and underscores."
+                   />
+                   <p className="text-xs text-muted-foreground">Leave empty for a random short link.</p>
+                </div>
+                
+                <div className="space-y-2 border-t pt-4">
+                   <Label className="text-xs font-semibold uppercase text-muted-foreground">UTM Builder</Label>
+                   <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-1">
+                         <Label htmlFor="utm_source" className="text-xs">Source</Label>
+                         <Input id="utm_source" name="utm_source" placeholder="google, newsletter" className="h-8 text-sm" />
+                      </div>
+                      <div className="space-y-1">
+                         <Label htmlFor="utm_medium" className="text-xs">Medium</Label>
+                         <Input id="utm_medium" name="utm_medium" placeholder="cpc, banner" className="h-8 text-sm" />
+                      </div>
+                   </div>
+                   <div className="space-y-1">
+                      <Label htmlFor="utm_campaign" className="text-xs">Campaign</Label>
+                      <Input id="utm_campaign" name="utm_campaign" placeholder="spring_sale" className="h-8 text-sm" />
+                   </div>
+                </div>
+             </CollapsibleContent>
+          </Collapsible>
           
           {error && (
             <div className="text-sm text-destructive font-medium px-1">

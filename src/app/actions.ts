@@ -8,8 +8,13 @@ import { z } from "zod";
 import { generateQRCode } from "@/lib/qr-code";
 import { headers } from "next/headers";
 
+import { customSlugSchema, utmParamsSchema } from "@/lib/validators";
+import { eq } from "drizzle-orm";
+
 const createLinkSchema = z.object({
   originalUrl: z.string().url("Invalid URL provided"),
+  slug: customSlugSchema.optional().or(z.literal("")),
+  ...utmParamsSchema.shape,
 });
 
 export type CreateLinkResult = 
@@ -17,11 +22,31 @@ export type CreateLinkResult =
   | { success: false; error: string };
 
 export async function createLink(formData: FormData): Promise<CreateLinkResult> {
-  const originalUrl = formData.get("originalUrl") as string;
-  
-  const validation = createLinkSchema.safeParse({ originalUrl });
+  const rawData = {
+    originalUrl: formData.get("originalUrl") as string,
+    slug: formData.get("slug") as string,
+    utm_source: formData.get("utm_source") as string,
+    utm_medium: formData.get("utm_medium") as string,
+    utm_campaign: formData.get("utm_campaign") as string,
+    utm_term: formData.get("utm_term") as string,
+    utm_content: formData.get("utm_content") as string,
+  };
+
+  const validation = createLinkSchema.safeParse(rawData);
   if (!validation.success) {
     return { success: false, error: validation.error.issues[0].message };
+  }
+
+  let finalUrl: URL;
+  try {
+    finalUrl = new URL(validation.data.originalUrl);
+    if (validation.data.utm_source) finalUrl.searchParams.set("utm_source", validation.data.utm_source);
+    if (validation.data.utm_medium) finalUrl.searchParams.set("utm_medium", validation.data.utm_medium);
+    if (validation.data.utm_campaign) finalUrl.searchParams.set("utm_campaign", validation.data.utm_campaign);
+    if (validation.data.utm_term) finalUrl.searchParams.set("utm_term", validation.data.utm_term);
+    if (validation.data.utm_content) finalUrl.searchParams.set("utm_content", validation.data.utm_content);
+  } catch (e) {
+    return { success: false, error: "Invalid URL" };
   }
 
   try {
@@ -35,13 +60,41 @@ export async function createLink(formData: FormData): Promise<CreateLinkResult> 
     
     const db = createDb(env);
     
-    // TODO: Collision check for US2
-    const slug = generateShortCode(); 
+    let slug = validation.data.slug;
+
+    if (slug) {
+      // Check for collision
+      const existing = await db.query.links.findFirst({
+        where: (links, { eq }) => eq(links.slug, slug!)
+      });
+      
+      if (existing) {
+        return { success: false, error: "Custom slug is already taken" };
+      }
+    } else {
+      // Generate unique slug
+      let retries = 5;
+      while (retries > 0) {
+        slug = generateShortCode();
+        const existing = await db.query.links.findFirst({
+           where: (links, { eq }) => eq(links.slug, slug!)
+        });
+        if (!existing) break;
+        retries--;
+      }
+      
+      if (retries === 0) {
+         return { success: false, error: "Failed to generate unique slug. Please try again." };
+      }
+    }
     
+    // Safety check just in case logic failed
+    if (!slug) throw new Error("Slug generation failed");
+
     await db.insert(links).values({
       id: crypto.randomUUID(),
       slug,
-      originalUrl: validation.data.originalUrl,
+      originalUrl: finalUrl.toString(),
       createdAt: new Date(),
       isActive: true,
       clickCount: 0
@@ -57,7 +110,7 @@ export async function createLink(formData: FormData): Promise<CreateLinkResult> 
     return { 
       success: true, 
       slug, 
-      originalUrl: validation.data.originalUrl,
+      originalUrl: finalUrl.toString(),
       shortUrl,
       qrCode
     };

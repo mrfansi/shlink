@@ -58,11 +58,11 @@
 
 ### Implementation for User Story 2
 
-- [ ] T022 [US2] Update Link Creation Action to handle optional custom slug in `src/app/actions.ts` - _See contracts/openapi.yaml #Schemas_
-- [ ] T023 [US2] Implement custom slug validation regex in `src/lib/validators.ts` - _See research.md #Logic_
-- [ ] T024 [P] [US2] Update Shortener Form UI to include Custom Slug & **UTM Builder** inputs in `src/components/features/shortener-form.tsx`
-- [ ] T025 [US2] Implement collision check logic in `src/db/queries.ts` (or within action)
-- [ ] T026 [US2] Add error handling for "Slug taken" in `src/components/features/shortener-form.tsx`
+- [x] T022 [US2] Update Link Creation Action to handle optional custom slug in `src/app/actions.ts` - _See contracts/openapi.yaml #Schemas_
+- [x] T023 [US2] Implement custom slug validation regex in `src/lib/validators.ts` - _See research.md #Logic_
+- [x] T024 [P] [US2] Update Shortener Form UI to include Custom Slug & **UTM Builder** inputs in `src/components/features/shortener-form.tsx`
+- [x] T025 [US2] Implement collision check logic in `src/db/queries.ts` (or within action)
+- [x] T026 [US2] Add error handling for "Slug taken" in `src/components/features/shortener-form.tsx`
 
 **Checkpoint**: Custom slugs are supported and validated.
 
