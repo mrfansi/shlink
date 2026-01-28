@@ -130,12 +130,12 @@
 
 ### Implementation for User Story 6
 
-- [ ] T048 [US6] Implement API Key generation in Dashboard `src/app/(dashboard)/settings/page.tsx`
-- [ ] T049 [US6] Create API Auth Middleware (Bearer Token) in `src/lib/api-auth.ts`
-- [ ] T050 [US6] Implement POST /api/shorten **(single & bulk)** endpoint in `src/app/api/v1/shorten/route.ts` - _See contracts/openapi.yaml_
-- [ ] T051 [US6] Implement CSV Parsing utility in `src/lib/csv.ts` - _See research.md #6_
-- [ ] T052 [US6] Create Bulk Upload UI in `src/app/(dashboard)/bulk/page.tsx`
-- [ ] T053 [US6] Implement Hybrid Bulk Processing (Direct <1k + Queue >1k) in `src/workers/consumer.ts` - _See research.md #1_
+- [x] T048 [US6] Add `api_keys` table to `src/db/schema.ts` - _See data-model.md #Auth_
+- [x] T049 [US6] Create Settings Page for API Keys in `src/app/(dashboard)/settings/page.tsx`
+- [x] T050 [US6] Implement Public API endpoint (POST /api/v1/shorten) in `src/app/api/v1/shorten/route.ts` - _See contracts/openapi.yaml_
+- [x] T051 [US6] Implement API Auth Middleware (Bearer Token)
+- [x] T052 [US6] Create Bulk Upload UI component in `src/components/features/bulk-uploader.tsx`
+- [x] T053 [US6] Implement Bulk Create sever action in `src/app/actions/bulk.ts` + Queue >1k) in `src/workers/consumer.ts` - _See research.md #1_
 
 **Checkpoint**: API and Bulk tools ready.
 

@@ -109,3 +109,18 @@ export type Click = typeof clicks.$inferSelect;
 export type NewClick = typeof clicks.$inferInsert;
 export type DailyLinkStat = typeof dailyLinkStats.$inferSelect;
 export type NewDailyLinkStat = typeof dailyLinkStats.$inferInsert;
+
+export const apiKeys = sqliteTable("api_keys", {
+	id: text("id").primaryKey(),
+	userId: text("user_id").references(() => user.id).notNull(),
+	key: text("key").notNull().unique(), // We should hash this in real prod, but for MVP we might keep raw or hash. Let's keep raw for simplicity or hashed if we implement display-once. 
+    // Spec says "API Key management". Let's store a partial key or just the key if we want to show it again (less secure).
+    // Better: Store hashed, show once. But for this MVP, I'll store it plainly to avoid complexity of "show once" UI flow right now, or just use a simple token.
+    // Actually, `crypto.randomUUID` or `nanoid` is fine.
+    name: text("name"),
+    lastUsedAt: integer("last_used_at", { mode: "timestamp" }),
+	createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
+});
+
+export type ApiKey = typeof apiKeys.$inferSelect;
+export type NewApiKey = typeof apiKeys.$inferInsert;
