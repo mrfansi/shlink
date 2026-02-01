@@ -41,6 +41,19 @@ Salin file `.env.example` ke `.env` (atau buat file `.env`) dan sesuaikan variab
 | `BETTER_AUTH_URL` | URL dasar aplikasi untuk backend autentikasi. | `http://localhost:3000` |
 | `NEXT_PUBLIC_BETTER_AUTH_URL` | URL publik aplikasi untuk frontend autentikasi. | `http://localhost:3000` |
 
+## Binding Cloudflare
+
+Proyek ini menggunakan beberapa binding Cloudflare Workers:
+
+| Binding | Tipe | Nama | Deskripsi |
+| :--- | :--- | :--- | :--- |
+| `shlink_db` | D1 Database | `shlink-db` | Database utama untuk menyimpan data link dan user |
+| `shlink_assets` | R2 Bucket | `shlink-assets` | Penyimpanan aset seperti QR code dan logo |
+| `shlink_kv` | KV Namespace | - | Cache untuk link dan data sering diakses |
+| `shlink_queue` | Queue | `shlink-queue` | Antrian untuk operasi asinkron |
+| `ASSETS` | Static Assets | - | Aset statis aplikasi |
+| `IMAGES` | Images | - | Optimisasi gambar Cloudflare |
+
 ## Prosedur Pengujian
 
 Saat ini, proyek ini belum memiliki suite pengujian otomatis yang terintegrasi (unit/integration).

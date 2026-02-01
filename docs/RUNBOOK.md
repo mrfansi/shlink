@@ -30,6 +30,26 @@ Aplikasi ini dideploy sebagai Cloudflare Worker menggunakan OpenNext.
 - **Error Autentikasi**: Periksa apakah `BETTER_AUTH_URL` di environment Cloudflare cocok dengan domain deployment.
 - **Batas KV/Cache**: Jika link tidak diperbarui, coba hapus entri di KV namespace `shlink_kv`.
 
+## Cron Trigger
+
+Aplikasi memiliki cron trigger yang berjalan setiap hari pada pukul 00:00 UTC:
+- **Jadwal**: `0 0 * * *` (setiap hari jam 00:00)
+- **Fungsi**: Membersihkan data analytics yang sudah expired, atau tugas pemeliharaan lainnya
+
+Untuk memonitor eksekusi cron:
+```bash
+wrangler tail shlink --format json | jq 'select(.event.scheduledTime)'
+```
+
+## Binding Reference
+
+| Binding | Tipe | Penggunaan |
+| :--- | :--- | :--- |
+| `shlink_db` | D1 | Database utama (link, user, analytics) |
+| `shlink_assets` | R2 | Storage untuk QR code, logo |
+| `shlink_kv` | KV | Cache link untuk redirect cepat |
+| `shlink_queue` | Queue | Async analytics processing |
+
 ## Prosedur Rollback
 
 Jika deployment baru menyebabkan masalah kritis:
@@ -44,3 +64,22 @@ Jika deployment baru menyebabkan masalah kritis:
 
 2.  **Rollback Database**:
     Hati-hati dengan rollback database. D1 tidak mendukung rollback migrasi secara otomatis. Perlu dilakukan perubahan skema manual atau migrasi balik jika memungkinkan.
+
+## Perintah Berguna
+
+```bash
+# Lihat log real-time
+wrangler tail shlink
+
+# Lihat log dengan format JSON
+wrangler tail shlink --format json
+
+# Akses D1 database
+wrangler d1 execute shlink-db --command "SELECT * FROM links LIMIT 10"
+
+# List file di R2
+wrangler r2 object list shlink-assets
+
+# Lihat isi KV
+wrangler kv key list --namespace-id 4e1b5364aa8c40bea404a55cadd87619
+```
