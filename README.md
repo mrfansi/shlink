@@ -119,10 +119,16 @@ You can generate an API key from the **Settings** page in the dashboard.
 
 ## Contributing
 
+Silakan baca [Panduan Kontribusi](docs/CONTRIB.md) untuk detail tentang alur kerja pengembangan kami.
+
 1.  Fork the repository.
 2.  Create a feature branch.
 3.  Commit your changes.
 4.  Open a Pull Request.
+
+## Operational Guide
+
+Untuk panduan deployment dan operasional, silakan lihat [Runbook Operasional](docs/RUNBOOK.md).
 
 ## License
 
